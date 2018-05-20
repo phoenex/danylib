@@ -1,0 +1,60 @@
+1. loader.xml 'de yeni bir doc kaydı oluşturun:
+
+    <item path="lib/dfile/dfile.php" name="fileUtil" object="dFile" />
+
+2. Kullanmak istediğiniz controllerda doc'tan objeyi çağırın:
+
+    class HomeController extends BaseController {
+        public function welcome() {
+            $fileUtil = _getDoc("fileUtil");
+            ...
+            ...
+        }
+    }
+
+
+3. Artık $fileUtil 'in public methodlarina erisebilirsiniz: 
+
+    * uploadFile($destinationFolder, $htmlFileObject, $fileName = "", $preffix = "") :
+        Formdan gelen dosyayi belirttiginiz konuma kaydeder. Random isim olusturur yada sizin $fileName parametresi ile 
+        belirttiginiz isimle kaydeder. İslem sonunda 2 elemanli bir array doner, birinci eleman islem sonucunu (OK / ERR),
+        ikinci eleman açıklamayı doner. İslem basariyla tamamlandıysa ikinci eleman yeni dosya adı olacaktır. 
+        Şu şekilde kullanabilirsiniz:
+
+        public function welcome() {
+            $fileUtil = _getDoc("fileUtil");
+            $uploadResult = $fileUtil->uploadFile("view/contentFiles/images", $_FILES['image']);
+            if($uploadResult[0] == 'OK') {
+                // islem basarili
+                $newFileName = $uploadResult[1];
+            } else {
+                // bir hata olustu
+                $error = $uploadResult[1];
+                echo $error;
+                exit;
+            }
+            ...
+            ...
+        }
+
+
+    * imageCreateFromSourceFile($sourceFile, $savePath, $newSize, $processWay = 'w') :
+        Belirttiginiz dosyanin belirttiginiz ebatlarda bir kopyasini belirttiginiz yere kaydeder. 
+        $sourceFile     : Kopyalanacak dosya. Sunucuda bir klasorde bulunmalidir.
+        $savePath       : Hangi dizine kopyalanacak
+        $newSize        : Yeni boyut (integer)
+        $processWay     : Genişliğe mi yüksekliğe göre mi işlem yapacak ;
+                            w: Genisligi belirtilen deger ($newSize) yap, genisligi buna göre oranla
+                            h: Yuksekligi belirtilen deger yap, genisligi buna göre oranla 
+                            b: Dikey resim (portrait) ise yukseklige gore, yatay resim (landscape) ise genislige gore
+        
+        *   Belirtilen boyut hali hazirdaki boyuttan buyukse islem yapilmaz resim ayni ebatlarda 
+            kopyalanır. Yani yüksekliği 600px olan bir resmi yüksekliği 800px olarak kopyala deseniz 
+            bile yukseklik yeni resim için 600 kalir.
+
+        Şu şekilde kullanabilirsiniz:
+
+        public function welcome() {
+            $fileUtil = _getDoc("fileUtil");
+            $fileUtil->imageCreateFromSourceFile("view/contentFiles/product/01.jpg", "view/contentFiles/product/thumbnail/01.jpg", 150, 'h');
+        }

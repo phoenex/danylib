@@ -1,0 +1,31 @@
+1. loader.xml 'de yeni bir doc kaydı oluşturun:
+
+    <item path="lib/di18n/di18n.php" name="translate" object="Di18n" />
+
+2. BaseController 'a $translate isimli protected bir property ekleyin. (protected $translate;)
+3. BaseController constructorında doc 'tan translate objesini çağırın ve $translate propertysine set edin. 
+
+Ayrıca viewlerin de kullanabilmesi için translate objesini modele ekleyin. BaseController şu şekilde görünecektir:
+
+<?php
+    class BaseController {
+        ...
+        protected $translate;
+
+        public function BaseController() {
+            ...
+            $this->translate = _getDoc("translate");
+            $this->addToModel("translate", $this->translate);
+            ...
+            ...
+        }
+    }
+?>
+
+Artık hem viewde hem de controller methodlarında translate kullanılabilir.
+    Controllerda: $this->translate->get("appName")
+    View dosyalarında: echo $translate->get("appName")
+şeklinde kullanabilirsiniz.
+
+* d18n.php dosyasında dil dosyalarının default konumu bir propertye (Bkz: d18n.php -> private $_languageFileFolder) 
+set edilmiştir. Gerekirse bunu değiştirin.

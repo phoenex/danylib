@@ -1,0 +1,69 @@
+1. loader.xml 'de yeni bir doc kaydı oluşturun:
+
+    <item path="lib/titanDb/appDao.php" name="dao" object="AppDao" namespace="lib.titanDb" dependency="titanDb"/>
+
+    Dikkat edin, appDao için bir bağımlılık (dependency) var. appDao PDO sınıfını extend eden bir wrapperdir. Asıl işlemi 
+    yapan titanDb classidir.
+
+2. BaseController 'a $dao isimli protected bir property ekleyin. (protected $dao;)
+3. BaseController constructorında doc 'tan dao objesini çağırın ve $dao propertysine set edin. 
+
+    BaseController şu şekilde görünecektir:
+
+    <?php
+        class BaseController {
+            ...
+            protected $dao;
+
+            public function BaseController() {
+                ...
+                $this->dao = _getDoc("dao");
+                ...
+                ...
+            }
+        }
+    ?>
+
+Bu şekilde dao tüm controllerlarda kullanılabilir hale gelecektir. 
+Controllerda kullanmak üzere methodlarımızı appDao içine yazarız ve bu methodları kullanırız. controllerlar direkt olarak 
+database sınıfına erişemez / erişmemelidir. Örneğin:
+
+    // appDao.php
+    <?php
+        namespace lib\titanDb;
+        
+        class AppDao extends TitanDb {
+        
+            public function getCategoryList() {
+                $sql = "SELECT * FROM category ORDER BY name";
+                return $this->table("category")->select("*")->orderBy("name")->getAll();
+            }
+        
+        }
+    ?>
+
+    // homeController
+    <?php
+        class HomeController extends BaseController {
+            
+            public function welcome() {
+                $categoryList = $this->dao->getCategoryList();
+                $this->addToModel("categoryList", $categoryList);
+                return "home";
+            }
+
+        }
+    ?>
+
+    // view/home.php içinde
+    <?php
+        ...
+        ...
+        foreach($categoryList as $cat) {
+            echo $cat->name . "<br>";
+        }
+    ?>
+
+PDO classi olarak titan2 frameworkun classini aldım. titanDb, mantıklı ve kullanımı kolay bir PDO classi olmus. 
+Ben sadece bunu bir wrapper arkasına gizledim. 
+titanDb kullanımı için: http://v2.titanphp.com/doc/database

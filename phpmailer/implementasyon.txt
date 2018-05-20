@@ -1,0 +1,36 @@
+1. loader.xml 'de yeni bir doc ve dependency kaydı oluşturun:
+    <doc>
+        ...
+        ...
+        <item path="lib/phpmailer/dmail.php" name="mail" object="DMail" dependency="PHPMailer"/>
+        ...
+        ...
+    </doc>
+    <dependency>
+        ...
+        ...
+        <item path="lib/phpmailer/PHPMailerAutoload.php" name="PHPMailer" />
+        ...
+        ...
+    </dependency>
+
+2. Kullanmak istediğiniz controllerda doc'tan objeyi çağırın:
+
+    class HomeController extends BaseController {
+        public function welcome() {
+            $mail = _getDoc("mail");
+            ...
+            ...
+        }
+    }
+
+
+3. Artık $mail 'in public methodlarina erisebilirsiniz. 
+
+DMail sinifi, phpmailer 'in wrapperi seklinde calisir. Mail methodlarimizi DMail icine yazacagiz. 
+DMail constructor 'ı içinde mail ayarlarini goreceksiniz. Bunlari kendinize gore duzenleyin.
+Ben ornek bir testMail() methodu ekledim. Buna bakarak kendi methodlarinizi yazabilirsiniz. 
+Mail source dosyalari /lib/phpmailer/mail-source klasorunde yer almalidir. Mail sablonunuz icindeki 
+degiskenleri {0}, {1}, ... , {n} seklinde yazabilirsiniz. 
+getSourceCode($sourceFileName, $parameters) methoduna sablon dosyanizin adini ve parametreleri verirseniz 
+bu method sizin icin parametreleri formatlayarak mesaj govdesini hazirlar.
