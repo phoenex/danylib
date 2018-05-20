@@ -1,6 +1,6 @@
 1. loader.xml 'de yeni bir doc kaydı oluşturun:
 
-    <item path="lib/dform/dform.php" name="dform" object="DForm" dependency="DBaseForm" />
+    <item path="lib/dform/dform.php" name="dform" namespace="lib.dform" object="DForm" dependency="DBaseForm" />
 
     BaseForm için dependency tanimini loader.xml'e ekleyin:
 
