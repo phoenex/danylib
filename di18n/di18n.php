@@ -41,7 +41,7 @@
 		public function set($languageCode) {
 			$languageCode = htmlentities($languageCode);
 			if(!$this->isValidLanguage($languageCode)) {
-				$languageCode = $this->validLanguageSet[ $defaultLanguageIndex ];
+				$languageCode = $this->validLanguageSet[ $this->defaultLanguageIndex];
 			}
 			$this->setLanguageToSession($languageCode);
 		}
