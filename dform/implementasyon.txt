@@ -1,0 +1,15 @@
+1. loader.xml 'de yeni bir doc kaydı oluşturun:
+
+    <item path="lib/dform/dform.php" name="dform" object="DForm" dependency="DBaseForm" />
+
+    BaseForm için dependency tanimini loader.xml'e ekleyin:
+
+    <item path="lib/dform/baseForm.php" name="DBaseForm" />
+
+2. İhtiyac duydugunuz controllerda DForm 'u doc 'tan çağırın:
+
+    $dForm = _getDoc("dform");
+    $form = $dForm->getForm("myFormName");
+    $dForm->fillForm($form);
+
+Artık elinizde POST datasi ile doldurulmus bir form var.
