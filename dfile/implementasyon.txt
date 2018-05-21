@@ -1,6 +1,6 @@
 1. loader.xml 'de yeni bir doc kaydı oluşturun:
 
-    <item path="lib/dfile/dfile.php" name="fileUtil" object="dFile" />
+    <item path="lib/dfile/dfile.php" name="fileUtil" object="dFile" namespace="lib.dfile"/>
 
 2. Kullanmak istediğiniz controllerda doc'tan objeyi çağırın:
 
